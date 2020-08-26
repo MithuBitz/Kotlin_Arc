@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,10 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        fab.setOnClickListener { findClickHandler() }
 
         lifecycle.addObserver(MyLifecycleObserver())
 
@@ -42,6 +39,10 @@ class MainActivity : AppCompatActivity() {
             imageView.setImageResource(R.drawable.die_6)
         }
 
+    }
+
+    private fun findClickHandler() {
+        Toast.makeText(this, "Replace with your own action", Toast.LENGTH_LONG).show()
     }
 
 }
