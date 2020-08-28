@@ -44,6 +44,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun findClickHandler() {
         val dice = DiceHelper.rollDice()
+        updateDisplay(dice)
+    }
+
+    private fun updateDisplay(dice: IntArray) {
         for (i in 0 until imageViews.size) {
             val drawableId = when (dice[i]) {
                 1 -> R.drawable.die_1
