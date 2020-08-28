@@ -5,11 +5,18 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.example.kotlin_arc.utils.DiceHelper
+import com.example.kotlin_arc.viewModel.DiceViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var viewModel : DiceViewModel
+    private lateinit var dice: IntArray
+    private lateinit var headlineText: String
 
     private val imageViews by lazy {
         arrayOf<ImageView>(
@@ -30,24 +37,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fab.setOnClickListener { findClickHandler() }
+        viewModel = ViewModelProviders.of(this)
+            .get(DiceViewModel::class.java)
+
+        headlineText = savedInstanceState?.getString(HEADLINE_TEXT)
+            ?: getString(R.string.wellcome)
+        dice = savedInstanceState?.getIntArray(DICE_COLLECTION)
+            ?: intArrayOf(6, 6, 6, 6, 6)
 
         lifecycle.addObserver(MyLifecycleObserver())
 
-        headline.text = getString(R.string.wellcome)
+        fab.setOnClickListener { findClickHandler() }
 
-        for (imageView in imageViews) {
-            imageView.setImageResource(R.drawable.die_6)
-        }
+        updateDisplay()
 
     }
 
     private fun findClickHandler() {
-        val dice = DiceHelper.rollDice()
-        updateDisplay(dice)
+        dice = DiceHelper.rollDice()
+        headlineText = DiceHelper.evaluateDice(this, dice)
+        updateDisplay()
     }
 
-    private fun updateDisplay(dice: IntArray) {
+    private fun updateDisplay() {
         for (i in 0 until imageViews.size) {
             val drawableId = when (dice[i]) {
                 1 -> R.drawable.die_1
@@ -61,7 +73,13 @@ class MainActivity : AppCompatActivity() {
             }
             imageViews[i].setImageResource(drawableId)
         }
-        headline.text = DiceHelper.evaluateDice(this, dice)
+        headline.text = headlineText
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState?.putString(HEADLINE_TEXT, headlineText)
+        outState?.putIntArray(DICE_COLLECTION, dice)
+        super.onSaveInstanceState(outState)
     }
 
 }
