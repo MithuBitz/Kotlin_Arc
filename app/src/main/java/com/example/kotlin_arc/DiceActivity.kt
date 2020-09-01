@@ -41,6 +41,11 @@ class DiceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dice)
         setSupportActionBar(toolbar)
 
+        //Display the back arrow to navigate to back
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //Change the default arrow icon to specific one
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_check)
+
         viewModel = ViewModelProviders.of(this)
             .get(DiceViewModel::class.java)
 
