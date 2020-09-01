@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toolbar
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_nav)
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         rollButton.setOnClickListener {
             val intent = Intent(this, DiceActivity::class.java)
@@ -28,9 +31,15 @@ class MainActivity : AppCompatActivity(),
         }
 
         val navView = findViewById<NavigationView>(R.id.nav_view)
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-
         navView.setNavigationItemSelectedListener(this)
+
+        //Add the toogle button
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.open_nav_drawer, R.string.close_nav_drawer
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
     }
 
